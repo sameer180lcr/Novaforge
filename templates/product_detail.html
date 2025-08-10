@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} — NovaForge AI{% endblock %}
+{% block content %}
+<section class="container product-detail">
+  <div class="media-column">
+    <div class="hero-art large">
+      <span class="badge-soon" aria-label="Coming soon">Coming soon</span>
+      <div class="orb"></div>
+      <div class="ring"></div>
+      <div class="ring ring-2"></div>
+    </div>
+  </div>
+  <div class="info-column">
+    <h1>{{ product.name }}</h1>
+    <p class="muted">{{ product.short }}</p>
+    <ul class="list">
+      {% for f in product.features %}
+      <li>{{ f }}</li>
+      {% endfor %}
+    </ul>
+    <div class="buy-row">
+      <div class="price big">${{ '%.2f'|format(product.price) }}</div>
+      <form method="post" action="{{ url_for('add_to_cart') }}" class="inline-form">
+        <input type="hidden" name="pid" value="{{ product.id }}" />
+        <input type="number" name="qty" value="1" min="1" />
+        <button class="btn">Add to cart</button>
+      </form>
+    </div>
+    <div class="templates glass">
+      <h3>Templates</h3>
+      {% if product.type == 'llm' %}
+      <h4>Chat completion (Python)</h4>
+      <pre class="code"><code>import requests
+API_KEY = 'YOUR_KEY'
+resp = requests.post('https://api.novaforge.ai/v1/chat', json={
+  'model': '{{ product.id }}',
+  'messages': [
+    {'role': 'system', 'content': 'You are a helpful assistant.'},
+    {'role': 'user', 'content': 'Summarize this in 3 bullet points: ...'}
+  ]
+}, headers={'Authorization': f'Bearer {API_KEY}'}).json()
+print(resp['choices'][0]['message']['content'])</code></pre>
+      <button class="btn copy-btn" data-target-prev>Copy</button>
+      {% else %}
+      <h4>Image generation (cURL)</h4>
+      <pre class="code"><code>curl -X POST https://api.novaforge.ai/v1/images \
+ -H "Authorization: Bearer YOUR_KEY" \
+ -H "Content-Type: application/json" \
+ -d '{
+   "model": "{{ product.id }}",
+   "prompt": "ultra-detailed, studio lighting, product shot",
+   "negative_prompt": "blurry, low quality"
+ }'</code></pre>
+      <button class="btn copy-btn" data-target-prev>Copy</button>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

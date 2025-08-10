@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Your Cart — NovaForge AI{% endblock %}
+{% block content %}
+<section class="container cart">
+  <h1>Your Cart</h1>
+  {% if items|length == 0 %}
+    <p class="muted">Your cart is empty.</p>
+    <a class="btn" href="{{ url_for('products') }}">Browse models</a>
+  {% else %}
+  <form method="post" action="{{ url_for('update_cart') }}">
+    <div class="cart-list">
+      {% for it in items %}
+      <div class="cart-row glass">
+        <div class="cart-title">{{ it.product.name }}</div>
+        <div class="cart-qty">
+          <label>Qty</label>
+          <input type="number" name="qty_{{ it.product.id }}" value="{{ it.qty }}" min="0" />
+        </div>
+        <div class="cart-price">${{ '%.2f'|format(it.total) }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="cart-summary">
+      <div>Subtotal</div>
+      <div class="price">${{ '%.2f'|format(subtotal) }}</div>
+    </div>
+    <div class="cart-actions">
+      <button class="btn ghost" type="submit">Update</button>
+      <a class="btn" href="{{ url_for('checkout') }}">Checkout</a>
+    </div>
+  </form>
+  {% endif %}
+</section>
+{% endblock %}
