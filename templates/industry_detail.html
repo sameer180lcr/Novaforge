@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+{% block title %}{{ industry.title }} Industry — NovaForge AI{% endblock %}
+{% block content %}
+<section class="section-light industry-hero">
+  <div class="container">
+    <nav class="tiny breadcrumbs"><a href="{{ url_for('home') }}">Home</a> / <a href="#" onclick="history.back();return false;">Industries</a> / <span>{{ industry.title }}</span></nav>
+    <h1>{{ industry.title }}</h1>
+    <p class="lede">{{ industry.summary }}</p>
+    {% if industry.art %}
+    <div class="industry-art" aria-hidden="true">
+      {% if industry.art_theme == 'media' %}
+      <!-- Media-themed SVG: camera frame, play button, sound waves -->
+      <svg width="100%" height="120" viewBox="0 0 800 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="m1" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#ff8a00"/>
+            <stop offset="100%" stop-color="#ff5ac8"/>
+          </linearGradient>
+        </defs>
+        <!-- camera frame -->
+        <rect x="60" y="24" width="200" height="72" rx="12" fill="rgba(255,255,255,0.6)" stroke="url(#m1)" stroke-width="2"/>
+        <rect x="230" y="36" width="48" height="48" rx="6" fill="rgba(255,255,255,0.4)" stroke="url(#m1)" stroke-width="2"/>
+        <!-- play button -->
+        <circle cx="140" cy="60" r="22" fill="rgba(255,255,255,0.7)" stroke="url(#m1)" stroke-width="2"/>
+        <polygon points="134,50 154,60 134,70" fill="#ff5ac8"/>
+        <!-- audio waves -->
+        <path d="M380 60 q20 -20 40 0 t40 0 t40 0" stroke="url(#m1)" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M380 80 q20 -20 40 0 t40 0 t40 0" stroke="rgba(255,138,0,0.6)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <!-- underline -->
+        <path d="M40 108 Q 180 96, 320 108 T 600 108" stroke="url(#m1)" stroke-width="2" fill="none"/>
+      </svg>
+      {% elif industry.art_theme == 'robotics' %}
+      <!-- Robotics-themed SVG: robotic arm, gears, signal arcs -->
+      <svg width="100%" height="120" viewBox="0 0 800 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="r1" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#00d2ff"/>
+            <stop offset="100%" stop-color="#3a7bd5"/>
+          </linearGradient>
+        </defs>
+        <!-- base arm -->
+        <rect x="70" y="54" width="140" height="12" rx="6" fill="rgba(255,255,255,0.65)" stroke="url(#r1)" stroke-width="2"/>
+        <circle cx="70" cy="60" r="10" fill="rgba(255,255,255,0.7)" stroke="url(#r1)" stroke-width="2"/>
+        <circle cx="210" cy="60" r="10" fill="rgba(255,255,255,0.7)" stroke="url(#r1)" stroke-width="2"/>
+        <!-- forearm -->
+        <rect x="210" y="40" width="110" height="12" rx="6" transform="rotate(-20 210 40)" fill="rgba(255,255,255,0.55)" stroke="url(#r1)" stroke-width="2"/>
+        <!-- gripper -->
+        <path d="M318 10 l16 10 l-10 16 l-16 -10 Z" fill="rgba(58,123,213,0.35)" stroke="url(#r1)" stroke-width="2"/>
+        <!-- gears -->
+        <circle cx="430" cy="70" r="14" fill="rgba(255,255,255,0.6)" stroke="url(#r1)" stroke-width="2"/>
+        <circle cx="460" cy="70" r="10" fill="rgba(255,255,255,0.5)" stroke="url(#r1)" stroke-width="2"/>
+        <path d="M430 56 v8 M430 76 v8 M416 70 h8 M436 70 h8" stroke="#3a7bd5" stroke-width="2" stroke-linecap="round"/>
+        <!-- signal arcs -->
+        <path d="M560 55 q20 -15 40 0" stroke="url(#r1)" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M560 70 q30 -20 60 0" stroke="rgba(0,210,255,0.6)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <!-- underline -->
+        <path d="M40 108 Q 200 96, 360 108 T 720 108" stroke="url(#r1)" stroke-width="2" fill="none"/>
+      </svg>
+      {% elif industry.art_theme == 'govtech' %}
+      <!-- GovTech-themed SVG: civic building, shield, network nodes -->
+      <svg width="100%" height="120" viewBox="0 0 800 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="gv1" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#34d399"/>
+            <stop offset="100%" stop-color="#10b981"/>
+          </linearGradient>
+        </defs>
+        <!-- civic building -->
+        <polygon points="140,36 220,62 60,62" fill="rgba(16,185,129,0.25)" stroke="url(#gv1)" stroke-width="2"/>
+        <rect x="70" y="62" width="140" height="34" rx="4" fill="rgba(255,255,255,0.6)" stroke="url(#gv1)" stroke-width="2"/>
+        <rect x="92" y="70" width="20" height="18" fill="rgba(255,255,255,0.7)" stroke="url(#gv1)"/>
+        <rect x="128" y="70" width="20" height="18" fill="rgba(255,255,255,0.7)" stroke="url(#gv1)"/>
+        <rect x="164" y="70" width="20" height="18" fill="rgba(255,255,255,0.7)" stroke="url(#gv1)"/>
+        <!-- shield -->
+        <path d="M300 48 l26 8 v16 c0 20 -26 28 -26 28 s-26 -8 -26 -28 V56 Z" fill="rgba(52,211,153,0.25)" stroke="url(#gv1)" stroke-width="2"/>
+        <path d="M290 68 l10 10 l16 -18" stroke="#10b981" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <!-- network nodes -->
+        <circle cx="440" cy="48" r="6" fill="#34d399"/>
+        <circle cx="480" cy="72" r="6" fill="#34d399"/>
+        <circle cx="520" cy="48" r="6" fill="#34d399"/>
+        <line x1="446" y1="50" x2="474" y2="70" stroke="url(#gv1)" stroke-width="2"/>
+        <line x1="486" y1="70" x2="514" y2="50" stroke="url(#gv1)" stroke-width="2"/>
+        <!-- underline -->
+        <path d="M40 108 Q 220 94, 400 108 T 760 108" stroke="url(#gv1)" stroke-width="2" fill="none"/>
+      </svg>
+      {% elif industry.art_theme == 'legal' %}
+      <!-- Legal-themed SVG: scales, document, gavel -->
+      <svg width="100%" height="120" viewBox="0 0 800 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="lg1" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#f59e0b"/>
+            <stop offset="100%" stop-color="#fbbf24"/>
+          </linearGradient>
+        </defs>
+        <!-- scales pillar -->
+        <rect x="110" y="48" width="10" height="44" fill="rgba(255,255,255,0.7)" stroke="url(#lg1)" stroke-width="2"/>
+        <line x1="85" y1="48" x2="145" y2="48" stroke="url(#lg1)" stroke-width="3"/>
+        <!-- left scale -->
+        <line x1="100" y1="48" x2="80" y2="32" stroke="url(#lg1)" stroke-width="2"/>
+        <circle cx="80" cy="32" r="2" fill="#fbbf24"/>
+        <path d="M62 32 h36 a2 2 0 0 1 2 2 v2 h-40 v-2 a2 2 0 0 1 2 -2 Z" fill="rgba(255,255,255,0.65)" stroke="url(#lg1)"/>
+        <!-- right scale -->
+        <line x1="130" y1="48" x2="150" y2="36" stroke="url(#lg1)" stroke-width="2"/>
+        <circle cx="150" cy="36" r="2" fill="#fbbf24"/>
+        <path d="M134 36 h32 a2 2 0 0 1 2 2 v2 h-36 v-2 a2 2 0 0 1 2 -2 Z" fill="rgba(255,255,255,0.65)" stroke="url(#lg1)"/>
+        <!-- document -->
+        <rect x="250" y="42" width="84" height="56" rx="6" fill="rgba(255,255,255,0.65)" stroke="url(#lg1)" stroke-width="2"/>
+        <line x1="260" y1="54" x2="324" y2="54" stroke="#f59e0b" stroke-width="2"/>
+        <line x1="260" y1="66" x2="324" y2="66" stroke="#f59e0b" stroke-width="2"/>
+        <line x1="260" y1="78" x2="308" y2="78" stroke="#f59e0b" stroke-width="2"/>
+        <!-- gavel -->
+        <rect x="450" y="78" width="56" height="10" rx="5" transform="rotate(-15 450 78)" fill="rgba(245,158,11,0.35)" stroke="url(#lg1)"/>
+        <rect x="496" y="64" width="10" height="36" rx="5" transform="rotate(-15 496 64)" fill="rgba(245,158,11,0.5)" stroke="url(#lg1)"/>
+        <rect x="474" y="92" width="70" height="6" rx="3" fill="rgba(255,255,255,0.5)" stroke="url(#lg1)"/>
+        <!-- underline -->
+        <path d="M40 110 Q 240 100, 440 110 T 760 110" stroke="url(#lg1)" stroke-width="2" fill="none"/>
+      </svg>
+      {% else %}
+        <!-- Education-themed SVG (default) -->
+        <svg width="100%" height="120" viewBox="0 0 800 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#64d2ff"/>
+              <stop offset="100%" stop-color="#a78bfa"/>
+            </linearGradient>
+          </defs>
+          <path d="M80 90 C120 70, 160 70, 200 90 L200 40 C160 20, 120 20, 80 40 Z" stroke="url(#g1)" stroke-width="2" fill="rgba(255,255,255,0.6)"/>
+          <path d="M200 90 C240 70, 280 70, 320 90 L320 40 C280 20, 240 20, 200 40 Z" stroke="url(#g1)" stroke-width="2" fill="rgba(255,255,255,0.45)"/>
+          <polygon points="520,40 600,70 520,100 440,70" fill="rgba(167,139,250,0.35)" stroke="url(#g1)" stroke-width="2"/>
+          <rect x="500" y="70" width="40" height="16" rx="4" fill="rgba(255,255,255,0.55)" stroke="url(#g1)" stroke-width="2"/>
+          <line x1="600" y1="70" x2="640" y2="95" stroke="#64d2ff" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="640" cy="95" r="6" fill="#64d2ff"/>
+          <path d="M40 112 Q 140 90, 240 110 T 440 110 T 640 108" stroke="url(#g1)" stroke-width="2" fill="none"/>
+        </svg>
+      </svg>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<section class="container industry-body">
+  <div class="industry-layout">
+    <aside class="toc">
+      <div class="card glass">
+        <h3>On this page</h3>
+        <ul>
+          {% for s in industry.sections %}
+          <li><a href="#sec-{{ loop.index }}">{{ s.heading }}</a></li>
+          {% endfor %}
+          {% if industry.charts %}<li><a href="#sec-metrics">Key Metrics</a></li>{% endif %}
+        </ul>
+      </div>
+    </aside>
+    <article class="prose glass">
+      {% for s in industry.sections %}
+        <section id="sec-{{ loop.index }}" class="prose-section">
+          <h2>{{ s.heading }}</h2>
+          {% if s.content %}<p>{{ s.content }}</p>{% endif %}
+          {% if s.bullets %}
+            <ul>
+              {% for b in s.bullets %}<li>{{ b }}</li>{% endfor %}
+            </ul>
+          {% endif %}
+        </section>
+      {% endfor %}
+
+      <section class="prose-section" id="sec-importance">
+        <h2>Strategic Importance</h2>
+        <p>
+          Large Language Models unlock step-change improvements in knowledge workflows: compressing research cycles, elevating customer experience,
+          and enforcing consistent compliance narratives at scale. Orchestrating LLMs with retrieval, tools, and guardrails compounds value quarter
+          over quarter as institutional context grows. Organizations that invest in data pipelines, evaluation harnesses, and human-in-the-loop review
+          create durable advantages while reducing operational risk.
+        </p>
+        <p>
+          Success requires a measured approach: small pilot surfaces measurable ROI, while governance, privacy, and model lifecycle controls pave the way
+          for broader deployment. With model distillation and cost-aware routing, total cost of ownership declines even as coverage expands. In parallel,
+          analyst and operator happiness improves as rote work is automated and expertise is amplified.
+        </p>
+      </section>
+
+      {% if industry.charts %}
+      <section class="prose-section charts" id="sec-metrics">
+        <h2>Key Metrics</h2>
+        <div class="charts-grid">
+          {% for key, cfg in industry.charts.items() %}
+          <div class="chart-card glass">
+            <h3>{{ cfg.title }}</h3>
+            <canvas id="chart-{{ key }}" height="120"></canvas>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+
+      <section class="prose-section cta">
+        <a class="btn" href="{{ url_for('products') }}">Explore models for {{ industry.title }}</a>
+      </section>
+    </article>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script id="charts-data" type="application/json">{{ (industry.charts | default({})) | tojson }}</script>
+  <script src="{{ url_for('static', filename='js/industry.js') }}"></script>
+{% endblock %}
