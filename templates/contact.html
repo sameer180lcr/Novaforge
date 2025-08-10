@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Contact — NovaForge AI{% endblock %}
+{% block content %}
+<section class="container contact">
+  <div class="page-head">
+    <h1>Contact</h1>
+    <p class="lede">We usually reply within 1 business day.</p>
+  </div>
+  {% if submitted %}
+    <div class="glass success" role="status">Thanks {{ data.name }}! We'll get back to you at {{ data.email }}.</div>
+  {% endif %}
+
+  <div class="grid-2">
+    <form class="contact-form glass" method="post">
+      <label>
+        <span class="tiny muted">Your name</span>
+        <input required name="name" placeholder="Jane Doe" />
+      </label>
+      <label>
+        <span class="tiny muted">Email</span>
+        <input required name="email" placeholder="you@company.com" type="email" />
+      </label>
+      <label class="full">
+        <span class="tiny muted">Message</span>
+        <textarea required name="message" placeholder="Tell us about your use case" rows="6"></textarea>
+      </label>
+      <div class="actions">
+        <button class="btn" type="submit">Send message</button>
+      </div>
+    </form>
+    <aside class="glass contact-aside">
+      <h3>Sales & Support</h3>
+      <ul class="list">
+        <li>Email: hello@novaforge.ai</li>
+        <li>Docs: docs.novaforge.ai</li>
+        <li>SLAs: Enterprise plans</li>
+      </ul>
+      <h4>Office</h4>
+      <p class="muted tiny">Silicon Valley, CA</p>
+    </aside>
+  </div>
+</section>
+{% endblock %}
