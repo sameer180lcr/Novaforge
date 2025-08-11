@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy — NovaForge AI{% endblock %}
+
+{% block content %}
+<section class="container" style="padding-top:32px">
+  <h1>Privacy Policy</h1>
+  <p class="muted">Last updated: {{ 2025 }}</p>
+
+  <div class="card">
+    <h3 style="margin-top:0">1. Data We Collect</h3>
+    <ul class="list">
+      <li>Account data (name, email)</li>
+      <li>Usage data (API requests, metrics)</li>
+      <li>Payment data handled by our processors</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">2. How We Use Data</h3>
+    <ul class="list">
+      <li>Provide, secure, and improve the service</li>
+      <li>Billing and account communication</li>
+      <li>Analytics and reliability</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">3. Retention & Security</h3>
+    <p>We retain data only as long as necessary and apply industry-standard safeguards.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">4. Your Choices</h3>
+    <p>Update details in <a href="{{ url_for('settings') }}">Settings</a>. For deletion requests, <a href="{{ url_for('contact') }}">contact us</a>.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">5. Third Parties</h3>
+    <p>We use subprocessors (e.g., cloud hosting, payments) bound by data protection terms.</p>
+  </div>
+</section>
+{% endblock %}

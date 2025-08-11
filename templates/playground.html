@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}Playground — NovaForge AI{% endblock %}
+{% block content %}
+<section class="container page-head">
+  <h1>Playground</h1>
+  <p class="muted">Try models instantly. Text models return sample completions; image models return a representative image.</p>
+</section>
+<section class="container grid-2">
+  <div class="glass" style="padding:16px">
+    <form id="pg-form" onsubmit="return runPlayground(event)">
+      <label>
+        <span class="tiny muted">Model</span>
+        <select id="pg-model" required>
+          {% for m in models %}
+          <option value="{{ m.id }}" data-type="{{ m.type }}">{{ m.name }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label class="full">
+        <span class="tiny muted">Prompt</span>
+        <textarea id="pg-prompt" rows="6" placeholder="Ask something… (e.g., Summarize ACME quarterly report in 3 bullets)"></textarea>
+      </label>
+      <div class="actions">
+        <button class="btn" type="submit">Run</button>
+        <button class="ghost" type="button" onclick="clearPlayground()">Clear</button>
+      </div>
+    </form>
+  </div>
+  <div class="glass" style="padding:16px; min-height:320px">
+    <h3 class="tiny muted">Output</h3>
+    <div id="pg-out" class="playground-out" style="min-height:260px; display:flex; align-items:center; justify-content:center; text-align:center; color:var(--muted)">Run a prompt to see results here.</div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+async function runPlayground(e){
+  e.preventDefault();
+  const sel = document.getElementById('pg-model');
+  const model = sel.value;
+  const prompt = document.getElementById('pg-prompt').value;
+  const out = document.getElementById('pg-out');
+  out.style.color = 'var(--muted)';
+  out.innerHTML = 'Running…';
+  try{
+    const resp = await fetch("{{ url_for('api_playground') }}", {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ model, prompt })
+    });
+    const data = await resp.json();
+    if(!data.ok){ throw new Error(data.error || 'Failed'); }
+    if(data.type === 'image'){
+      out.style.color = 'inherit';
+      out.innerHTML = `<img alt="Result image" src="${data.image}" style="max-width:100%; border-radius:12px" />`;
+    } else {
+      out.style.whiteSpace = 'pre-wrap';
+      out.style.textAlign = 'left';
+      out.style.color = 'inherit';
+      out.innerText = data.text;
+    }
+  }catch(err){
+    out.style.color = 'crimson';
+    out.innerText = 'Error: ' + err.message;
+  }
+  return false;
+}
+function clearPlayground(){
+  document.getElementById('pg-prompt').value='';
+  const out = document.getElementById('pg-out');
+  out.style.whiteSpace = '';
+  out.style.textAlign = 'center';
+  out.style.color = 'var(--muted)';
+  out.innerHTML = 'Run a prompt to see results here.';
+}
+</script>
+{% endblock %}

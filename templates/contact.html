@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block title %}Contact — NovaForge AI{% endblock %}
+{% block content %}
+<section class="container contact">
+  <div class="page-head">
+    <h1>Contact</h1>
+    <p class="lede">We usually reply within 1 business day.</p>
+  </div>
+  {% if submitted %}
+    <div class="glass success" role="status">Thanks {{ data.name }}! We'll get back to you at {{ data.email }}.</div>
+  {% endif %}
+  {% if error %}
+    <div class="glass" role="alert" aria-live="assertive">{{ error }}</div>
+  {% endif %}
+
+  <div class="grid-2">
+    <form class="contact-form glass" method="post" novalidate>
+      <label>
+        <span class="tiny muted">Your name</span>
+        <input required name="name" placeholder="Jane Doe" value="{{ (data.name if data else '') }}" />
+      </label>
+      <label>
+        <span class="tiny muted">Email</span>
+        <input required name="email" placeholder="you@company.com" type="email" value="{{ (data.email if data else '') }}" />
+      </label>
+      <label>
+        <span class="tiny muted">Company</span>
+        <input name="company" placeholder="Acme Inc." value="{{ (data.company if data else '') }}" />
+      </label>
+      <label>
+        <span class="tiny muted">Phone (optional)</span>
+        <input name="phone" placeholder="+1 555 000 0000" value="{{ (data.phone if data else '') }}" />
+      </label>
+      <label>
+        <span class="tiny muted">Subject</span>
+        <input required name="subject" placeholder="Tell us how we can help" value="{{ (data.subject if data else '') }}" />
+      </label>
+      <label>
+        <span class="tiny muted">Category</span>
+        <select name="category" aria-label="Category">
+          {% set cat = (data.category if data else '') %}
+          <option value="Sales" {% if cat=='Sales' %}selected{% endif %}>Sales</option>
+          <option value="Support" {% if cat=='Support' %}selected{% endif %}>Support</option>
+          <option value="Partnership" {% if cat=='Partnership' %}selected{% endif %}>Partnership</option>
+          <option value="Other" {% if cat=='Other' %}selected{% endif %}>Other</option>
+        </select>
+      </label>
+      <label>
+        <span class="tiny muted">Budget</span>
+        <select name="budget" aria-label="Budget">
+          {% set b = (data.budget if data else '') %}
+          <option value="Undisclosed" {% if b=='Undisclosed' %}selected{% endif %}>Undisclosed</option>
+          <option value="<$1k/mo" {% if b=='<$1k/mo' %}selected{% endif %}>&lt;$1k/mo</option>
+          <option value="$1k–$5k/mo" {% if b=='$1k–$5k/mo' %}selected{% endif %}>$1k–$5k/mo</option>
+          <option value=">$5k/mo" {% if b=='>$5k/mo' %}selected{% endif %}>&gt;$5k/mo</option>
+        </select>
+      </label>
+      <label class="full">
+        <span class="tiny muted">Message</span>
+        <textarea required name="message" placeholder="Tell us about your use case" rows="6">{{ (data.message if data else '') }}</textarea>
+      </label>
+      <label class="full" style="display:flex; align-items:center; gap:8px">
+        <input type="checkbox" name="consent" {% if data and data.consent %}checked{% endif %} />
+        <span class="tiny muted">I agree to be contacted and accept the privacy policy.</span>
+      </label>
+      {% if RECAPTCHA_SITE_KEY %}
+      <div class="full" style="margin:8px 0">
+        <div class="g-recaptcha" data-sitekey="{{ RECAPTCHA_SITE_KEY }}"></div>
+      </div>
+      <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+      {% endif %}
+      <div class="actions">
+        <button class="btn" type="submit">Send message</button>
+      </div>
+    </form>
+    <aside class="glass contact-aside">
+      <h3>Sales & Support</h3>
+      <ul class="list">
+        <li>Email: hello@novaforge.ai</li>
+        <li>Docs: docs.novaforge.ai</li>
+        <li>SLAs: Enterprise plans</li>
+      </ul>
+      <h4>Office</h4>
+      <p class="muted tiny">Silicon Valley, CA</p>
+    </aside>
+  </div>
+</section>
+{% endblock %}

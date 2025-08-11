@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Testimonials — NovaForge AI{% endblock %}
+{% block content %}
+<section class="container page-head">
+  <h1>Loved by builders</h1>
+  <p class="muted">What our customers say about NovaForge.</p>
+</section>
+
+<section class="container">
+  <div class="product-grid">
+    {% for q in quotes %}
+    <figure class="card" style="background:#fff">
+      <blockquote style="margin:0 0 8px">“{{ q.quote }}”</blockquote>
+      <figcaption class="muted">— {{ q.name }}, {{ q.company }}</figcaption>
+    </figure>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="container" style="margin-top:24px">
+  <div class="card">
+    <h3 style="margin:0 0 8px">Ready to build?</h3>
+    <div class="cta">
+      <a class="btn" href="{{ url_for('products') }}">Browse models</a>
+      <a class="btn ghost" href="{{ url_for('pricing') }}">See pricing</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

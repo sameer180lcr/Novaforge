@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — NovaForge AI{% endblock %}
+
+{% block content %}
+<section class="container" style="padding-top:32px">
+  <h1>Dashboard</h1>
+  <p class="muted">Welcome back, {{ user.name or 'Guest' }}. Here's an overview of your account.</p>
+
+  <div class="grid-3" style="margin-top:18px">
+    <div class="card glass">
+      <div class="muted tiny">Current Plan</div>
+      <div style="display:flex; align-items:baseline; gap:8px; margin-top:8px">
+        <div class="h3">{{ stats.plan.name }}</div>
+        <div class="muted">{% if stats.plan.price %}${{ stats.plan.price }}/{{ stats.plan.period }}{% else %}Free{% endif %}</div>
+      </div>
+      <a class="ghost" href="{{ url_for('pricing') }}" style="margin-top:8px; display:inline-block">Change plan →</a>
+    </div>
+    <div class="card glass">
+      <div class="muted tiny">Models Purchased</div>
+      <div class="h2" style="margin-top:8px">{{ stats.purchased }}</div>
+      <a class="ghost" href="{{ url_for('products') }}" style="margin-top:8px; display:inline-block">Browse models →</a>
+    </div>
+    <div class="card glass">
+      <div class="muted tiny">Catalog Size</div>
+      <div class="h2" style="margin-top:8px">{{ stats.total_models }}</div>
+      <div class="muted" style="margin-top:8px">LLMs, Image, Audio, Tools</div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:24px">
+    <div class="card">
+      <h3 style="margin-top:0">Owned Models</h3>
+      {% if owned_products and owned_products|length > 0 %}
+      <div class="product-grid">
+        {% for p in owned_products %}
+        <div class="product-card">
+          <img src="{{ p.image or url_for('static', filename='img/models/generic.svg') }}" alt="{{ p.name }}" loading="lazy" />
+          <div class="pc-meta">
+            <div class="pc-title">{{ p.name }}</div>
+            <div class="muted tiny">Type: {{ p.type|title }}</div>
+          </div>
+          <div class="pc-actions">
+            <a class="ghost" href="{{ url_for('products', q=p.name) }}">Docs</a>
+            <a class="btn" href="{{ url_for('playground') }}">Playground</a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="muted">No purchases yet. Explore our models to get started.</p>
+      <a class="btn" href="{{ url_for('products') }}">Browse models</a>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">Recent Activity</h3>
+      {% if activity and activity|length > 0 %}
+      <ul class="list">
+        {% for a in activity %}
+          <li style="display:flex; justify-content:space-between; gap:12px">
+            <span>{{ a.label }}</span>
+            <span class="muted tiny">{{ a.meta }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="muted">No activity yet.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:24px">
+    <h3 style="margin-top:0">Invoices</h3>
+    {% if invoices and invoices|length > 0 %}
+    <div class="table">
+      <div class="t-head">
+        <div>ID</div>
+        <div>Status</div>
+        <div>Amount</div>
+        <div>Items</div>
+      </div>
+      {% for inv in invoices|reverse %}
+      <div class="t-row">
+        <div>{{ inv.id }}</div>
+        <div><span class="badge">{{ inv.status|title }}</span></div>
+        <div>{{ inv.currency or 'USD' }} {{ inv.amount }}</div>
+        <div>
+          {% for it in inv.items %}
+            <div class="muted tiny">{{ it.qty }}× {{ it.name }} — ${{ '%.2f'|format(it.total) }}</div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="muted">No invoices yet.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}About NovaForge AI{% endblock %}
+
+{% block content %}
+<section class="container" style="padding-top:32px">
+  <h1>About NovaForge</h1>
+  <p class="muted">We build reliable AI models and tools for companies and creators. Clean UX, strong engineering, practical results.</p>
+
+  <div class="grid-2" style="margin-top:18px">
+    <div class="card">
+      <h3 style="margin-top:0">Mission</h3>
+      <p>Make advanced AI simple to adopt: great defaults, transparent pricing, and deployment anywhere.</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">What We Offer</h3>
+      <ul class="list">
+        <li>LLMs for chat, code, and reasoning</li>
+        <li>Image generation with control and upscaling</li>
+        <li>Fine-tuning, safety, and enterprise integrations</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <h3 style="margin-top:0">Connect</h3>
+    <p>Follow us on <a href="https://x.com/Sameer1243603" target="_blank" rel="noopener">X</a> or <a href="{{ url_for('contact') }}">contact us</a> for partnership and support.</p>
+  </div>
+</section>
+{% endblock %}

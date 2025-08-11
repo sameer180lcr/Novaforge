@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Settings — NovaForge AI{% endblock %}
+
+{% block content %}
+<section class="container" style="padding-top:32px">
+  <h1>Settings</h1>
+  <p class="muted">Manage your account details, API key, and preferences.</p>
+
+  <div class="grid-2" style="margin-top:18px">
+    <div class="card">
+      <h3 style="margin-top:0">Profile</h3>
+      <form method="post" class="form-grid">
+        <label>
+          <span class="muted tiny">Name</span>
+          <input type="text" name="name" value="{{ user.name }}" />
+        </label>
+        <label>
+          <span class="muted tiny">Email</span>
+          <input type="email" name="email" value="{{ user.email }}" />
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; margin-top:6px">
+          <input type="checkbox" name="newsletter" {% if newsletter %}checked{% endif %} />
+          <span>Subscribe to updates</span>
+        </label>
+        <div style="margin-top:12px">
+          <button class="btn" type="submit">Save changes</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">API Key</h3>
+      <div class="inline-form">
+        <input id="api-key" type="text" value="{{ api_key }}" readonly />
+        <button class="ghost" type="button" onclick="navigator.clipboard.writeText(document.getElementById('api-key').value); showToast('Copied!')">Copy</button>
+      </div>
+      <form method="post" style="margin-top:8px">
+        <input type="hidden" name="regen_key" value="1" />
+        <button class="ghost" type="submit">Regenerate</button>
+      </form>
+      <p class="muted tiny" style="margin-top:8px">Keep your key secret. Rotate if you suspect exposure.</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:24px">
+    <h3 style="margin-top:0">Plan</h3>
+    <div style="display:flex; align-items:center; gap:12px">
+      <div><strong>{{ plan.name }}</strong>{% if plan.price %} — ${{ plan.price }}/{{ plan.period }}{% else %} — Free{% endif %}</div>
+      <a class="btn" href="{{ url_for('pricing') }}">Change plan</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

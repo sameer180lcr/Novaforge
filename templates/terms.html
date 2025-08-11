@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Terms & Conditions — NovaForge AI{% endblock %}
+
+{% block content %}
+<section class="container" style="padding-top:32px">
+  <h1>Terms & Conditions</h1>
+  <p class="muted">Last updated: {{ 2025 }}</p>
+
+  <div class="card">
+    <h3 style="margin-top:0">1. Overview</h3>
+    <p>These Terms govern your access to and use of NovaForge AI products, APIs, and services.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">2. Acceptable Use</h3>
+    <ul class="list">
+      <li>No illegal, harmful, or abusive use.</li>
+      <li>No attempts to re-identify anonymized data.</li>
+      <li>No model extraction or misuse of API keys.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">3. Accounts & Billing</h3>
+    <p>You are responsible for safeguarding your account credentials and all usage. Paid plans are billed per the pricing page.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">4. Data</h3>
+    <p>We process data to provide the service. We do not claim ownership over your data. See <a href="{{ url_for('privacy') }}">Privacy Policy</a>.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">5. Warranty & Liability</h3>
+    <p>Services are provided "as is" without warranties. To the fullest extent permitted by law, NovaForge AI is not liable for indirect or consequential damages.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">6. Termination</h3>
+    <p>We may suspend or terminate access for violations. You may cancel anytime via your account.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">7. Contact</h3>
+    <p>Questions? <a href="{{ url_for('contact') }}">Contact us</a>.</p>
+  </div>
+</section>
+{% endblock %}

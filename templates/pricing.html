@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}Pricing — NovaForge AI{% endblock %}
+{% block content %}
+<section class="container page-head">
+  <h1>Pricing</h1>
+  <p class="muted">Simple tiers that scale with you. Start free, upgrade anytime.</p>
+</section>
+
+<section class="container section-light">
+  <div class="product-grid">
+    {% for t in tiers %}
+    <div class="card" style="display:flex; flex-direction:column; gap:12px; background:#fff">
+      {% if t.highlight %}
+        <div class="chip" aria-label="Most popular">Most popular</div>
+      {% endif %}
+      <h3 style="margin:6px 0 0">{{ t.name }}</h3>
+      <div class="muted">
+        {% if t.price is not none %}
+          <span class="price big">${{ t.price }}</span><span> / {{ t.period }}</span>
+        {% else %}
+          <span class="price big">Custom</span>
+        {% endif %}
+      </div>
+      <ul class="list" style="margin:6px 0 0 18px">
+        {% for f in t.features %}
+        <li>{{ f }}</li>
+        {% endfor %}
+      </ul>
+      <div style="margin-top:auto">
+        {% if t.id == 'enterprise' %}
+          <a class="btn" href="{{ url_for('contact') }}">{{ t.cta }}</a>
+        {% elif t.id == 'starter' %}
+          <a class="btn" href="{{ url_for('register') }}">{{ t.cta }}</a>
+        {% else %}
+          <a class="btn" href="{{ url_for('checkout') }}">{{ t.cta }}</a>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="container" style="margin-top:24px">
+  <div class="card">
+    <h3 style="margin:0 0 8px">FAQs</h3>
+    <details>
+      <summary>Can I switch plans later?</summary>
+      <p>Yes, upgrades are prorated and immediate. Downgrades apply next cycle.</p>
+    </details>
+    <details>
+      <summary>Is there an SLA?</summary>
+      <p>Pro includes standard SLA; Enterprise offers custom SLAs and dedicated SRE.</p>
+    </details>
+    <details>
+      <summary>Do you offer trials?</summary>
+      <p>Starter is free forever. Pro has a 14-day free trial.</p>
+    </details>
+  </div>
+</section>
+{% endblock %}

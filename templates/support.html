@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Support — NovaForge AI{% endblock %}
+{% block content %}
+<section class="container support">
+  <div class="page-head">
+    <h1>Support</h1>
+    <p class="lede">Helpful resources, quick answers, and ways to reach us.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="glass">
+      <h3>Getting started</h3>
+      <ol class="list">
+        <li>Create an account and choose a model.</li>
+        <li>Get your API key from Dashboard → Keys.</li>
+        <li>Use the quick-start templates below.</li>
+      </ol>
+      <h4>LLM Quick start (Python)</h4>
+      <pre class="code"><code>import requests
+API_KEY = 'YOUR_KEY'
+resp = requests.post('https://api.novaforge.ai/v1/chat', json={
+  'model': 'llm-pro-70b',
+  'messages': [{'role': 'user', 'content': 'Hello!'}]
+}, headers={'Authorization': f'Bearer {API_KEY}'}).json()
+print(resp['choices'][0]['message']['content'])</code></pre>
+      <button class="btn copy-btn" data-target-prev>Copy</button>
+    </div>
+
+    <div class="glass">
+      <h3>Image Generation (cURL)</h3>
+      <pre class="code"><code>curl -X POST https://api.novaforge.ai/v1/images \
+ -H "Authorization: Bearer YOUR_KEY" \
+ -H "Content-Type: application/json" \
+ -d '{
+   "model": "img-gen-studio",
+   "prompt": "a cinematic portrait of a snow leopard, 85mm, shallow DOF"
+ }'</code></pre>
+      <button class="btn copy-btn" data-target-prev>Copy</button>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="glass">
+      <h3>FAQ</h3>
+      <ul class="list">
+        <li><strong>Latency?</strong> Sub-250ms for small LLMs, <1s for 70B.</li>
+        <li><strong>Fine-tuning?</strong> Yes, LoRA and full-FT options.</li>
+        <li><strong>Security?</strong> SOC2 in progress, data isolation.</li>
+      </ul>
+    </div>
+    <div class="glass">
+      <h3>Contact</h3>
+      <p class="muted">Need help from a human? Reach out.</p>
+      <a class="btn" href="{{ url_for('contact') }}">Contact support</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

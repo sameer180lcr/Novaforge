@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}Compare Models — NovaForge AI{% endblock %}
+{% block content %}
+<section class="container page-head">
+  <h1>Compare models</h1>
+  <p class="muted">Pick two models to compare specs, features, and pricing.</p>
+</section>
+
+<section class="container">
+  <form class="filters" method="get" action="{{ url_for('compare') }}" aria-label="Compare selector">
+    <label class="muted" for="model-a">Model A</label>
+    <select id="model-a" name="a">
+      <option value="">Select…</option>
+      {% for o in options %}
+      <option value="{{ o.id }}" {% if a and a.id==o.id %}selected{% endif %}>{{ o.name }}</option>
+      {% endfor %}
+    </select>
+    <label class="muted" for="model-b">Model B</label>
+    <select id="model-b" name="b">
+      <option value="">Select…</option>
+      {% for o in options %}
+      <option value="{{ o.id }}" {% if b and b.id==o.id %}selected{% endif %}>{{ o.name }}</option>
+      {% endfor %}
+    </select>
+    <button class="btn" type="submit">Compare</button>
+  </form>
+</section>
+
+{% if a or b %}
+<section class="container" style="margin-top:16px">
+  <div class="card" style="overflow:auto">
+    <table style="width:100%; border-collapse:collapse">
+      <thead>
+        <tr>
+          <th style="text-align:left; padding:10px">Spec</th>
+          <th style="text-align:left; padding:10px">{{ a.name if a else '—' }}</th>
+          <th style="text-align:left; padding:10px">{{ b.name if b else '—' }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:10px; border-top:1px solid var(--border)">Type</td>
+          <td style="padding:10px; border-top:1px solid var(--border)">{{ a.format_label if a else '—' }}</td>
+          <td style="padding:10px; border-top:1px solid var(--border)">{{ b.format_label if b else '—' }}</td>
+        </tr>
+        <tr>
+          <td style="padding:10px; border-top:1px solid var(--border)">Badges</td>
+          <td style="padding:10px; border-top:1px solid var(--border)">
+            {% if a and a.badges %}
+            <div class="badges-row">{% for x in a.badges %}<span class="badge">{{ x.k }}: {{ x.v }}</span>{% endfor %}</div>
+            {% else %}—{% endif %}
+          </td>
+          <td style="padding:10px; border-top:1px solid var(--border)">
+            {% if b and b.badges %}
+            <div class="badges-row">{% for x in b.badges %}<span class="badge">{{ x.k }}: {{ x.v }}</span>{% endfor %}</div>
+            {% else %}—{% endif %}
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:10px; border-top:1px solid var(--border)">Price</td>
+          <td style="padding:10px; border-top:1px solid var(--border)">{% if a %}{{ a.price|price }}{% else %}—{% endif %}</td>
+          <td style="padding:10px; border-top:1px solid var(--border)">{% if b %}{{ b.price|price }}{% else %}—{% endif %}</td>
+        </tr>
+        <tr>
+          <td style="padding:10px; border-top:1px solid var(--border)">Highlights</td>
+          <td style="padding:10px; border-top:1px solid var(--border)">{% if a %}{{ a.short }}{% else %}—{% endif %}</td>
+          <td style="padding:10px; border-top:1px solid var(--border)">{% if b %}{{ b.short }}{% else %}—{% endif %}</td>
+        </tr>
+        <tr>
+          <td style="padding:10px; border-top:1px solid var(--border)">Features</td>
+          <td style="padding:10px; border-top:1px solid var(--border)">{% if a %}<ul class="list">{% for f in a.features %}<li>{{ f }}</li>{% endfor %}</ul>{% else %}—{% endif %}</td>
+          <td style="padding:10px; border-top:1px solid var(--border)">{% if b %}<ul class="list">{% for f in b.features %}<li>{{ f }}</li>{% endfor %}</ul>{% else %}—{% endif %}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

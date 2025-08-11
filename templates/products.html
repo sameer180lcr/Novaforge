@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}Models — NovaForge AI{% endblock %}
+{% block content %}
+<section class="container page-head">
+  <h1>Models</h1>
+  <form class="filters" method="get" action="{{ url_for('products') }}">
+    <a class="chip {% if active_filter==None %}active{% endif %}" href="{{ url_for('products') }}">All</a>
+    <a class="chip {% if active_filter=='llm' %}active{% endif %}" href="{{ url_for('products', type='llm') }}">LLMs</a>
+    <a class="chip {% if active_filter=='image' %}active{% endif %}" href="{{ url_for('products', type='image') }}">Image</a>
+    <span style="flex:1"></span>
+    <input name="q" value="{{ q or '' }}" placeholder="Search models" aria-label="Search models" />
+    <input name="min_price" value="{{ '%.0f'|format(min_price) if min_price is not none else '' }}" placeholder="Min $" aria-label="Min price" type="number" min="0" step="1" style="width:110px" />
+    <input name="max_price" value="{{ '%.0f'|format(max_price) if max_price is not none else '' }}" placeholder="Max $" aria-label="Max price" type="number" min="0" step="1" style="width:110px" />
+    <select name="sort" aria-label="Sort">
+      <option value="" {% if not sort %}selected{% endif %}>Sort</option>
+      <option value="name" {% if sort=='name' %}selected{% endif %}>Name</option>
+      <option value="price_asc" {% if sort=='price_asc' %}selected{% endif %}>Price: Low to High</option>
+      <option value="price_desc" {% if sort=='price_desc' %}selected{% endif %}>Price: High to Low</option>
+    </select>
+    <button class="btn" type="submit">Apply</button>
+  </form>
+</section>
+<section class="container product-grid">
+  <a class="product-card highlight" href="{{ url_for('create_model') }}">
+    <span class="badge-soon" aria-label="Customizable">Builder</span>
+    <div class="product-media">
+      <img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?w=800&q=80&auto=format&fit=crop" alt="Create Model" loading="lazy">
+    </div>
+    <div class="product-info">
+      <div class="product-title">Create Your Own Model</div>
+      <div class="muted">Choose framework, size, latency, compliance and 30+ options</div>
+      <div class="price">Dynamic pricing</div>
+    </div>
+  </a>
+  {% for p in products %}
+  {% if p.id != 'model-custom' %}
+  <a class="product-card" href="{{ url_for('product_detail', pid=p.id) }}" data-pid="{{ p.id }}" data-pname="{{ p.name }}">
+    <label class="select-pill" aria-label="Select for compare" title="Select for compare">
+      <input type="checkbox" class="compare-select" value="{{ p.id }}" />
+      <span class="tiny muted">Compare</span>
+    </label>
+    <span class="badge-soon" aria-label="Coming soon">Coming soon</span>
+    <div class="product-media">
+      <img src="{{ p.resolved_image }}" alt="{{ p.name }}" loading="lazy">
+    </div>
+    <div class="product-info">
+      <div class="product-title">{{ p.name }}</div>
+      <div class="tiny muted">{{ p.format_label }}</div>
+      {% if p.badges %}
+      <div class="badges-row">
+        {% for b in p.badges %}
+          <span class="badge">{{ b.k }}: {{ b.v }}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <div class="muted">{{ p.short }}</div>
+      <div class="price">{{ p.price|price }}</div>
+      <form action="{{ url_for('add_to_cart') }}" method="post" class="inline-form" onsubmit="showToast('Added to cart')">
+        <input type="hidden" name="pid" value="{{ p.id }}" />
+        <input type="hidden" name="qty" value="1" />
+        <button class="btn" type="submit" aria-label="Add {{ p.name }} to cart">Add</button>
+        <a class="btn ghost" href="{{ url_for('product_detail', pid=p.id) }}" aria-label="View {{ p.name }} details">Details</a>
+      </form>
+    </div>
+  </a>
+  {% endif %}
+  {% endfor %}
+</section>
+<div id="compare-bar" class="compare-bar" role="region" aria-label="Compare bar">
+  <span class="count" id="compare-count">0 selected</span>
+  <button id="compare-go" class="btn" disabled>Compare</button>
+  <button id="compare-clear" class="btn ghost">Clear</button>
+  <span class="tiny muted" style="margin-left:6px">Pick up to 2</span>
+  </div>
+{% endblock %}

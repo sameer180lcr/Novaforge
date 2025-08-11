@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} — NovaForge AI{% endblock %}
+{% block content %}
+<section class="container product-detail">
+  <div class="media-column">
+    <div class="hero-art large product-media" aria-label="Model preview">
+      <img src="{{ product.resolved_image }}" alt="{{ product.name }}" loading="lazy">
+    </div>
+  </div>
+  <div class="info-column">
+    <h1>{{ product.name }}</h1>
+    <p class="tiny muted">{{ product.format_label }}</p>
+    <p class="muted">{{ product.short }}</p>
+    <ul class="list">
+      {% for f in product.features %}
+      <li>{{ f }}</li>
+      {% endfor %}
+    </ul>
+    <div class="buy-row">
+      <div class="price big">{{ product.price|price }}</div>
+      <form method="post" action="{{ url_for('add_to_cart') }}" class="inline-form">
+        <input type="hidden" name="pid" value="{{ product.id }}" />
+        <input type="number" name="qty" value="1" min="1" />
+        <button class="btn">Add to cart</button>
+      </form>
+    </div>
+    <div class="templates glass">
+      <h3>Templates</h3>
+      <div class="tabbar" role="tablist" aria-label="Code samples">
+        <button class="tab active" data-tab="py" role="tab" aria-selected="true">Python</button>
+        <button class="tab" data-tab="js" role="tab" aria-selected="false">JavaScript</button>
+        <button class="tab" data-tab="curl" role="tab" aria-selected="false">cURL</button>
+      </div>
+      <div class="tabpanel" data-panel="py" role="tabpanel">
+{% if product.type == 'llm' %}
+<pre class="code"><code>import requests
+API_KEY = 'YOUR_KEY'
+resp = requests.post('https://api.novaforge.ai/v1/chat', json={
+  'model': '{{ product.id }}',
+  'messages': [
+    {'role': 'system', 'content': 'You are a helpful assistant.'},
+    {'role': 'user', 'content': 'Summarize this in 3 bullet points: ...'}
+  ]
+}, headers={'Authorization': f'Bearer {API_KEY}'}).json()
+print(resp['choices'][0]['message']['content'])</code></pre>
+{% else %}
+<pre class="code"><code>import requests
+API_KEY = 'YOUR_KEY'
+resp = requests.post('https://api.novaforge.ai/v1/images', json={
+  'model': '{{ product.id }}',
+  'prompt': 'ultra-detailed, studio lighting, product shot',
+  'negative_prompt': 'blurry, low quality'
+}, headers={'Authorization': f'Bearer {API_KEY}'}).json()
+print(resp['data'][0]['url'])</code></pre>
+{% endif %}
+        <button class="btn copy-btn" data-target-prev>Copy</button>
+      </div>
+      <div class="tabpanel" data-panel="js" role="tabpanel" hidden>
+{% if product.type == 'llm' %}
+<pre class="code"><code>const resp = await fetch('https://api.novaforge.ai/v1/chat', {
+  method: 'POST',
+  headers: { 'Authorization': 'Bearer YOUR_KEY', 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    model: '{{ product.id }}',
+    messages: [
+      { role: 'system', content: 'You are a helpful assistant.' },
+      { role: 'user', content: 'Summarize this in 3 bullet points: ...' }
+    ]
+  })
+});
+const data = await resp.json();
+console.log(data.choices[0].message.content);</code></pre>
+{% else %}
+<pre class="code"><code>const resp = await fetch('https://api.novaforge.ai/v1/images', {
+  method: 'POST',
+  headers: { 'Authorization': 'Bearer YOUR_KEY', 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    model: '{{ product.id }}',
+    prompt: 'ultra-detailed, studio lighting, product shot',
+    negative_prompt: 'blurry, low quality'
+  })
+});
+const data = await resp.json();
+console.log(data.data[0].url);</code></pre>
+{% endif %}
+        <button class="btn copy-btn" data-target-prev>Copy</button>
+      </div>
+      <div class="tabpanel" data-panel="curl" role="tabpanel" hidden>
+{% if product.type == 'llm' %}
+<pre class="code"><code>curl -X POST https://api.novaforge.ai/v1/chat \
+ -H "Authorization: Bearer YOUR_KEY" \
+ -H "Content-Type: application/json" \
+ -d '{
+   "model": "{{ product.id }}",
+   "messages": [
+     {"role":"system","content":"You are a helpful assistant."},
+     {"role":"user","content":"Summarize this in 3 bullet points: ..."}
+   ]
+ }'</code></pre>
+{% else %}
+<pre class="code"><code>curl -X POST https://api.novaforge.ai/v1/images \
+ -H "Authorization: Bearer YOUR_KEY" \
+ -H "Content-Type: application/json" \
+ -d '{
+   "model": "{{ product.id }}",
+   "prompt": "ultra-detailed, studio lighting, product shot",
+   "negative_prompt": "blurry, low quality"
+ }'</code></pre>
+{% endif %}
+        <button class="btn copy-btn" data-target-prev>Copy</button>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    // simple tabs
+    document.querySelectorAll('.tabbar').forEach(bar => {
+      const root = bar.closest('.templates');
+      const panels = root.querySelectorAll('.tabpanel');
+      bar.querySelectorAll('.tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          bar.querySelectorAll('.tab').forEach(b=>{b.classList.remove('active'); b.setAttribute('aria-selected','false')});
+          btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+          const target = btn.getAttribute('data-tab');
+          panels.forEach(p => { p.hidden = p.getAttribute('data-panel') !== target; });
+        });
+      });
+    });
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "{{ product.name }}",
+    "description": "{{ product.short }}",
+    "sku": "{{ product.id }}",
+    "image": ["{{ (product.resolved_image | replace(url_for('static', filename=''), url_for('static', filename='', _external=True))) if product.resolved_image else url_for('static', filename='img/logo.svg', _external=True) }}"],
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "USD",
+      "price": "{{ '%.2f'|format(product.price) }}",
+      "availability": "https://schema.org/PreOrder",
+      "url": "{{ url_for('product_detail', pid=product.id, _external=True) }}"
+    }
+  }
+  </script>
+{% endblock %}

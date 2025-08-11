@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}FAQ — NovaForge AI{% endblock %}
+{% block content %}
+<section class="container page-head">
+  <h1>Frequently asked questions</h1>
+  <p class="muted">Short answers to common questions. Still stuck? <a class="text-link" href="{{ url_for('contact') }}">Contact us</a>.</p>
+</section>
+
+<section class="container">
+  <div class="card" style="background:#fff">
+    {% for item in faqs %}
+      <details style="padding:12px 0; border-top:1px solid var(--border)">
+        <summary style="font-weight:700; cursor:pointer">{{ item.q }}</summary>
+        <p class="muted" style="margin:8px 0 0">{{ item.a }}</p>
+      </details>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
