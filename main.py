@@ -812,7 +812,7 @@ def industry(slug):
         if t == "image": return "Image Gen"
         return (p.get("type") or "Model").title()
     recs = [dict(p, resolved_image=resolve_image(p), format_label=format_label(p)) for p in recs]
-    return render_template("industry.html", page=data, slug=slug, recs=recs)
+    return render_template("industry_detail.html", industry=data, slug=slug, recs=recs)
 
 @app.route("/models/create", methods=["GET", "POST"]) 
 def create_model():
